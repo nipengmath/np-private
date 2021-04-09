@@ -119,7 +119,7 @@ class BaseTrainable(object):
                                                          profile_batch=self.flags.profile_batch)
             callbacks.append(tb_callback)
         if self.flags.patient_valid_passes:
-            EarlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
+            EarlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_ctr_auc',
                                                              patience=self.flags.patient_valid_passes,
                                                              mode='min',
                                                              restore_best_weights=True)
