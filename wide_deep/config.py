@@ -22,14 +22,38 @@ num_workers = 20
 
 ## 模型
 
-#model_name = "lr"
-model_name = "esmm"
+model_name = "mmoe"
+
+### esmm config
 #deep_layers = [1024, 1024, 1024]
 deep_layers = [1024, 512, 256, 128]
 share_deep_layers = [1024, 512, 256, 128]
 batch_size = 1024
 learning_rate = 0.0005
 epochs = 20
+
+
+## mmoe config
+units = 16
+num_experts = 8
+num_tasks = 2
+use_expert_bias = True
+use_gate_bias = True
+expert_activation = 'relu'
+gate_activation = 'softmax'
+expert_bias_initializer = 'zeros'
+gate_bias_initializer = 'zeros'
+expert_bias_regularizer = None
+gate_bias_regularizer = None
+expert_bias_constraint = None
+gate_bias_constraint = None
+expert_kernel_initializer = 'VarianceScaling'
+gate_kernel_initializer = 'VarianceScaling'
+expert_kernel_regularizer = None
+gate_kernel_regularizer = None
+expert_kernel_constraint = None
+gate_kernel_constraint = None
+activity_regularizer = None
 
 
 ## 训练参数
