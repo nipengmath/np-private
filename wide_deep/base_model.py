@@ -67,7 +67,7 @@ class BaseCTRModel(tf.keras.models.Model):
             feature_columns.append(tf.feature_column.numeric_column(feature))
 
         for feature in self.cat_features:
-            cat_values_list = [int(x) for x in self.vocab_dict[feature]]
+            cat_values_list = [int(x) if x else -1 for x in self.vocab_dict[feature]]
             cat_value_to_index_layer = tf.feature_column.categorical_column_with_vocabulary_list(feature,
                                                                                                  vocabulary_list=cat_values_list,
                                                                                                  num_oov_buckets=1)
