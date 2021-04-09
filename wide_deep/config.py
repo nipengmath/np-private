@@ -12,6 +12,8 @@ gpus = "1"  #"0,1"
 ## 训练数据
 train_path = "/mount_nas/newsugg/workspace/nlp/model/search_product_24/train.shuf.json"
 valid_path = "/mount_nas/newsugg/workspace/nlp/model/search_product_24/test.shuf.json"
+#train_path = "/mount_nas/newsugg/workspace/nlp/model/search_product_24/sample.json"
+#valid_path = "/mount_nas/newsugg/workspace/nlp/model/search_product_24/sample.json"
 
 train_tfrecord_path = "./data/train.tfrecord"
 valid_tfrecord_path = "./data/valid.tfrecord"
@@ -25,8 +27,8 @@ num_workers = 20
 #model_name = "lr"
 model_name = "esmm"
 #deep_layers = [1024, 1024, 1024]
-deep_layers = [512, 256, 128]
-share_deep_layers = [512, 256, 128]
+deep_layers = [1024, 512, 256, 128]
+share_deep_layers = [1024, 512, 256, 128]
 batch_size = 1024
 learning_rate = 0.0005
 epochs = 20

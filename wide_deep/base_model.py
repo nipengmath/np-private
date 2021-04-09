@@ -20,6 +20,7 @@ class BaseCTRModel(tf.keras.models.Model):
         self.labels, self.cat_features, self.con_features, self.bool_features = load_feature_config()
         self.vocab_dict = get_vocab_dict(config.training_feature_info_file, self.cat_features)
         self.input_layer = self.build_input_layer()
+        self.step_layer = self.build_step_layer()
         self.predict_layer = self.build_predictions()
 
     def BN(self, fv):
@@ -67,7 +68,7 @@ class BaseCTRModel(tf.keras.models.Model):
             feature_columns.append(tf.feature_column.numeric_column(feature))
 
         for feature in self.cat_features:
-            cat_values_list = [int(x) for x in self.vocab_dict[feature]]
+            cat_values_list = [int(x) if x else -1 for x in self.vocab_dict[feature]]
             cat_value_to_index_layer = tf.feature_column.categorical_column_with_vocabulary_list(feature,
                                                                                                  vocabulary_list=cat_values_list,
                                                                                                  num_oov_buckets=1)
@@ -86,6 +87,13 @@ class BaseCTRModel(tf.keras.models.Model):
 
         input_layer = tf.keras.layers.DenseFeatures(feature_columns)
         return input_layer
+
+    def build_step_layer(self):
+        feature_columns = []
+        for feature in ["step_level"]:
+            feature_columns.append(tf.feature_column.numeric_column(feature))
+        layer = tf.keras.layers.DenseFeatures(feature_columns)
+        return layer
 
     def build_wide_layer(self):
         feature_columns = []
@@ -119,4 +127,5 @@ class BaseCTRModel(tf.keras.models.Model):
 
     def build_features(self, inputs):
         features = self.input_layer(inputs)
-        return features
+        step_level = self.step_layer(inputs)
+        return features, step_level
