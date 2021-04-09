@@ -65,7 +65,7 @@ LR_SCHEDULE = [
 
 # ["adam", "adagrad", "adadelta", "lazyadam", "sgd", "RMSprop", "ftrl"],
 optimizer = "adam"
-patient_valid_passes = 3
+patient_valid_passes = 10
 profile_batch = None
 summaries_dir = "summary"
 

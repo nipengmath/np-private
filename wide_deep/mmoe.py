@@ -17,6 +17,7 @@ from tensorflow.keras import layers, Model, initializers, regularizers, activati
 
 class MMoE(BaseTrainable, BaseCTRModel):
     def __init__(self):
+        print("========> mmoe <===========")
         super().__init__()
 
     def build(self, input_shape):
