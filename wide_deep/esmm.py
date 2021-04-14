@@ -33,6 +33,7 @@ class ESMM(BaseTrainable, BaseCTRModel):
         return ctr_logit, cvr_logit
 
     def call(self, inputs, is_training=None):
+        ## print(inputs)
         features = self.build_features(inputs)
         ctr_logit, cvr_logit = self.build_networks(features, is_training)
 
@@ -41,7 +42,7 @@ class ESMM(BaseTrainable, BaseCTRModel):
 
         self.ctr_pred =  tf.identity(self.ctr_pred, name="ctr_label")
         self.ctcvr_pred = tf.multiply(self.ctr_pred, self.cvr_pred, name="cvr_label")
-        return {"ctr": self.ctr_pred, "cvr": self.ctcvr_pred}
+        return {"ctr": self.ctr_pred, "cvr": self.ctcvr_pred, "output_0": self.ctcvr_pred}
 
 
 
