@@ -93,7 +93,7 @@ class ESMM(BaseTrainable, BaseCTRModel):
         step_index = tf.one_hot(tf.cast(tf.squeeze(step_level, axis=1), dtype=tf.int32), depth=5)
         self.ctr_pred = tf.reduce_sum(tf.multiply(self.ctr_pred, step_index), axis=1)
         self.ctcvr_pred = tf.reduce_sum(tf.multiply(self.ctcvr_pred, step_index), axis=1)
-        return {"ctr": self.ctr_pred, "cvr": self.ctcvr_pred}
+        return {"ctr": self.ctr_pred, "cvr": self.ctcvr_pred, "output_0": self.ctcvr_pred}
 
 
 

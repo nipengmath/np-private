@@ -44,8 +44,8 @@ class Json2TFRecord(object):
                 for item in raw_record:
                     tmp = raw_record[item]
                     if item in self.cat_features:
-                        tmp = [int(x) if x else 0 for x in tmp]
-                        # 离散特征值，是个列表
+                        # 离散特征值，是个列表的列表
+                        tmp = tmp[0]
                         features[item] = self._int64_feature(tmp)
                     elif item in self.con_features:
                         # 连续特征值，是个浮点数
