@@ -24,10 +24,13 @@ def test2():
     train_iter = base_trainer.train_iterator
     for feature_batch, label_batch in train_iter.take(1):
         print("==1", feature_batch)
-        print("==2", label_batch)
+        ctr_3 = feature_batch["ctr_3"]
+        key_menu1 = feature_batch["key_menu1"]
+        print("==1", ctr_3.shape)
+        print("==2", key_menu1.shape)
 
 
 if __name__ == "__main__":
     print("ok")
-    test1()
-    #test2()
+    #test1()
+    test2()

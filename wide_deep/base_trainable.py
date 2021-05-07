@@ -65,11 +65,20 @@ class BaseTrainable(object):
         parsed = tf.io.parse_single_example(record, features=feature_map)
         feature = {}
         for key in parsed:
+            print("========", key)
             v = parsed[key]
-
+            #print(key, v)
             ## 特殊处理离散值
             if key in self.cat_features:
-                v = tf.reshape(v.values, shape=[1, -1])
+                print(v.shape)
+                v = v.values
+                ## v = tf.reshape(v.values, shape=[1, -1])
+                print(v.shape)
+                #v = tf.squeeze(v, axis=1)
+            if key in self.con_features:
+                v = float(v)
+            if key in self.bool_features:
+                v = float(v)
             feature[key] = v
 
         ## label
@@ -79,7 +88,7 @@ class BaseTrainable(object):
         })
         ctr_label =  tf.identity(label["ctr_label"], name="ctr_label")
         cvr_label =  tf.identity(label["cvr_label"], name="cvr_label")
-        return feature, {"ctr": ctr_label, "cvr": cvr_label}
+        return feature, {"CTR": ctr_label, "CTCVR": cvr_label}
 
     def tfrecord_pipeline(self, tfrecord_files, batch_size,
                           epochs, shuffle=True):
@@ -119,7 +128,7 @@ class BaseTrainable(object):
                                                          profile_batch=self.flags.profile_batch)
             callbacks.append(tb_callback)
         if self.flags.patient_valid_passes:
-            EarlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_ctr_auc',
+            EarlyStopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss',
                                                              patience=self.flags.patient_valid_passes,
                                                              mode='min',
                                                              restore_best_weights=True)

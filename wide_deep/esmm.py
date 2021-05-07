@@ -34,10 +34,10 @@ class ESMM(BaseTrainable, BaseCTRModel):
         self.deep_cvr_block4 = self.build_deep(hidden=hidden)
 
     def build_loss(self):
-        return {"ctr": "binary_crossentropy", "cvr": "binary_crossentropy"}
+        return {"CTR": "binary_crossentropy", "CTCVR": "binary_crossentropy"}
 
     def build_loss_weight(self):
-        return {"ctr": 1.0, "cvr": 1.0}
+        return {"CTR": 1.0, "CTCVR": 1.0}
 
     def build_networks(self, features, is_training=None):
         share_output = self.deep_share_block(features, is_training)
@@ -60,6 +60,7 @@ class ESMM(BaseTrainable, BaseCTRModel):
         return ctr_logit0, cvr_logit0, ctr_logit1, cvr_logit1, ctr_logit2, cvr_logit2, ctr_logit3, cvr_logit3, ctr_logit4, cvr_logit4
 
     def call(self, inputs, is_training=None):
+        print(inputs)
         features, step_level = self.build_features(inputs)
         ctr_logit0, cvr_logit0, ctr_logit1, cvr_logit1, ctr_logit2, cvr_logit2, ctr_logit3, cvr_logit3, ctr_logit4, cvr_logit4 = self.build_networks(features, is_training)
 
@@ -89,11 +90,20 @@ class ESMM(BaseTrainable, BaseCTRModel):
         self.ctcvr_pred4 = tf.multiply(self.ctr_pred4, self.cvr_pred4, name="cvr_label4")
 
         self.ctr_pred = tf.concat([self.ctr_pred0, self.ctr_pred1, self.ctr_pred2, self.ctr_pred3, self.ctr_pred4], axis=1)
+        self.cvr_pred = tf.concat([self.cvr_pred0, self.cvr_pred1, self.cvr_pred2, self.cvr_pred3, self.cvr_pred4], axis=1)
         self.ctcvr_pred = tf.concat([self.ctcvr_pred0, self.ctcvr_pred1, self.ctcvr_pred2, self.ctcvr_pred3, self.ctcvr_pred4], axis=1)
+
         step_index = tf.one_hot(tf.cast(tf.squeeze(step_level, axis=1), dtype=tf.int32), depth=5)
+
         self.ctr_pred = tf.reduce_sum(tf.multiply(self.ctr_pred, step_index), axis=1)
+        self.cvr_pred = tf.reduce_sum(tf.multiply(self.cvr_pred, step_index), axis=1)
         self.ctcvr_pred = tf.reduce_sum(tf.multiply(self.ctcvr_pred, step_index), axis=1)
-        return {"ctr": self.ctr_pred, "cvr": self.ctcvr_pred, "output_0": self.ctcvr_pred}
+        return {
+            "CTR": self.ctr_pred,
+            "CVR": self.cvr_pred,
+            "CTCVR": self.ctcvr_pred,
+            "output_0": self.ctcvr_pred
+        }
 
 
 
