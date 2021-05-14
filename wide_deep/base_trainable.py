@@ -70,10 +70,10 @@ class BaseTrainable(object):
             #print(key, v)
             ## 特殊处理离散值
             if key in self.cat_features:
-                print(v.shape)
-                v = v.values
-                ## v = tf.reshape(v.values, shape=[1, -1])
-                print(v.shape)
+                #print(v.shape)
+                #v = v.values
+                v = tf.reshape(v.values, shape=[1, -1])
+                #print(v.shape)
                 #v = tf.squeeze(v, axis=1)
             if key in self.con_features:
                 v = float(v)
